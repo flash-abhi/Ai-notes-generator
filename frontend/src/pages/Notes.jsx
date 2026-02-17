@@ -62,9 +62,10 @@ const Notes = () => {
     <motion.div
     initial={{opacity:0,y:20}}
     animate={{opacity: 1, y: 0}}
-    className="my-12"
-    >
+    className="my-12 flex justify-around"
+    > 
       <TopicForm loading={loading} setResult={setResult} setLoading={setLoading} setError={setError}/>
+      <div className="hidden md:block "><img src="boy.png" className="h-100 w-70" /></div>
     </motion.div>
     {result && <motion.div className="h-64 rounded-2xl flex flex-col items-center justify-center bg-white/60 backdrop-blur-lg border border-dashed border-gray-300 text-gray-500 shadow-inner">
       <span className="text-4xl mb-3">📘</span>

@@ -27,8 +27,6 @@ const Auth = () => {
       dispatch(setUserData(result.data));
       toast.success("Login Successful");
       navigate("/", { replace: true });
-      // console.log(result.data);
-      window.location.reload();
     } catch (error) {
       toast.error("Login Failed");
       console.error("Error during Google sign-in:", error);
