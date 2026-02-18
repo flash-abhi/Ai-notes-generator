@@ -15,7 +15,6 @@ const Navbar = () => {
         try {
             const result = await axios.get(serverUrl+"/api/auth/logout",{withCredentials: true});
             toast.success("Logout Successful");
-            window.location.reload();
         } catch (error) {
             toast.error("Logout Failed");
             console.log(error);
