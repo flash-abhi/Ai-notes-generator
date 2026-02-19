@@ -23,7 +23,7 @@ If you generate invalid JSON, regenerate internally before returning.
 
 ==================================================
 TASK:
-Convert the given topic into structured, exam-focused notes.
+Convert the given topic into structured, detailed exam-focused notes.
 
 INPUT:
 Topic: ${topic}
@@ -56,11 +56,11 @@ IF Revision Mode = ON:
 - revisionPoints must summarize ALL key facts.
 
 IF Revision Mode = OFF:
-- Notes must be detailed but exam-focused.
+- Notes must be very detailed and deep explaination.
 - Each sub-topic must include:
   - Definition
-  - Short explanation (max 2-4 lines)
-  - Example (real-world if applicable)
+  - Deep explanation (max 4 - 8 lines)
+  - Example (real-world if applicable) deeply explained (6-8 lines long).
 - Keep explanations concise.
 
 ==================================================

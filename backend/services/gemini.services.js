@@ -1,5 +1,5 @@
 
-const gemeniURL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview:generateContent";
+const gemeniURL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent";
 
 export const generateGeminiResponse = async (prompt) => {
     try {
@@ -38,5 +38,6 @@ export const generateGeminiResponse = async (prompt) => {
     return JSON.parse(cleanText);
  } catch (error) {
         console.log(error);
+        throw error;
     }
 }

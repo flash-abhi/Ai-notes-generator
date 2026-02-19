@@ -16,7 +16,7 @@ const Auth = () => {
     try {
       const response = await signInWithPopup(auth, provider);
       const user = response.user;
-      console.log(user);
+      // console.log(user);
       const name = user.displayName;
       const email = user.email;
       const result = await axios.post(
@@ -24,9 +24,9 @@ const Auth = () => {
         { name, email },
         { withCredentials: true },
       );
+      navigate("/");
       dispatch(setUserData(result.data));
       toast.success("Login Successful");
-      navigate("/", { replace: true });
     } catch (error) {
       toast.error("Login Failed");
       console.error("Error during Google sign-in:", error);

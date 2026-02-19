@@ -1,26 +1,31 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import {AnimatePresence, motion} from "framer-motion";
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import axios  from 'axios';
 import { serverUrl } from '../App';
 import {toast} from "react-toastify";
 import { useNavigate } from 'react-router-dom';
+import { setUserData } from '../redux/userSlice';
+import { useEffect } from 'react';
 const Navbar = () => {
     const navigate = useNavigate();
     const {userData} = useSelector((state) => state.user);
     const credits = userData?.credits;
     const [showCredits, setShowCredits] = useState(false);
     const [showProfile, setShowProfile] = useState(false);
+    const dispatch = useDispatch();
     const handleSignout = async () => {
         try {
             const result = await axios.get(serverUrl+"/api/auth/logout",{withCredentials: true});
+            dispatch(setUserData(null));
+            navigate("/auth")
             toast.success("Logout Successful");
         } catch (error) {
             toast.error("Logout Failed");
             console.log(error);
         }
     }
-  return (
+  return userData && (
     <motion.div
      initial={{
           opacity: 0,
@@ -89,7 +94,7 @@ const Navbar = () => {
                 whileHover={{scale:1.07}}
                 whileTap={{scale: 1}}
                  className='flex items-center gap-1 px-4 py-2 rounded-full bg-white/10 border border-white/20 text-white text-sm shadow-md cursor-pointer'>
-                    <span className='text-lg font-semibold text-blue-200'>{userData?.name.slice(0,1).toUpperCase()}</span>
+                    <span className='text-lg font-semibold text-blue-200'>{userData?.name?.slice(0,1)?.toUpperCase()}</span>
                     
                 </motion.div>
                 <AnimatePresence>
