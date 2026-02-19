@@ -3,7 +3,9 @@ import { motion } from "motion/react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import TopicForm from "../components/TopicForm";
-import { CgSpinnerTwo } from "react-icons/cg";
+import Sidebar from "../components/Sidebar";
+import FinalResult from "../components/FinalResult";
+
 
 const Notes = () => {
   const {userData} = useSelector((state)=> state.user);
@@ -65,13 +67,41 @@ const Notes = () => {
     className="my-12 flex justify-around"
     > 
       <TopicForm loading={loading} setResult={setResult} setLoading={setLoading} setError={setError}/>
-      <div className="hidden md:block "><img src="boy.png" className="h-100 w-70" /></div>
+      <div className="hidden md:block "><img src="robot.png" className="h-100" /></div>
     </motion.div>
-    {result && <motion.div className="h-64 rounded-2xl flex flex-col items-center justify-center bg-white/60 backdrop-blur-lg border border-dashed border-gray-300 text-gray-500 shadow-inner">
+    {loading && (
+      <motion.div 
+      animate={{opacity: [0.4,1,0.4]}}
+      transition={{repeat: Infinity, duration: 1.2}}
+      className="text-center text-black font-medium mb-6"
+      >
+        Generating notes...
+      </motion.div>
+    )}
+    {
+      error && (
+        <div className="mb-6 text-center text-red-600 font-medium">
+          {error}
+        </div>
+      )
+    }
+    {!result && <motion.div className="h-64 rounded-2xl flex flex-col items-center justify-center bg-white/60 backdrop-blur-lg border border-dashed border-gray-300 text-gray-500 shadow-inner">
       <span className="text-4xl mb-3">📘</span>
       <p className="text-sm">Generated notes will appear here</p>
     </motion.div> }
-    </>
+    {result && <motion.div 
+    initial={{opacity:0,y:30}}
+    animate={{opacity: 1, y:0}}
+    transition={{duration: 0.4}}
+    className="flex flex-col lg:grid lg:grid-cols-4 gap-6">
+      <div className="lg:col-span-1 mx-3">
+          <Sidebar result={result} />
+      </div>
+      <div className="lg:col-span-3 mx-3 my-3 rounded-2xl bg-white shadow-[0_15px_40px_rgba(0,0,0,0.15)] p-6">
+          <FinalResult result={result}/>
+      </div>
+    </motion.div>}
+    </> 
   );
 };
 

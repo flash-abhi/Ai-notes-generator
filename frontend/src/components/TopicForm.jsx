@@ -1,6 +1,10 @@
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import { CgSpinnerTwo } from "react-icons/cg";
+import { generateNotes } from "../hooks/api";
+import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { updateCredits } from "../redux/userSlice";
 const TopicForm = ({ setResult, setLoading, loading, setError }) => {
   const [topic, setTopic] = useState("");
   const [classLevel, setClassLevel] = useState("");
@@ -8,6 +12,63 @@ const TopicForm = ({ setResult, setLoading, loading, setError }) => {
   const [revisionMode, setRevisionMode] = useState(false);
   const [includeDiagram, setIncludeDiagram] = useState(false);
   const [includeChart, setIncludeChart] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [progressText, setProgressText] = useState("");
+  const dispatch = useDispatch();
+  const handleSubmit = async () => {
+    if(!topic.trim()){
+      setError("Please enter the topic");
+      return;
+    }
+    setError("");
+    setLoading(true);
+    setResult(null);
+    try {
+      const result = await generateNotes({topic,classLevel,examType, revisionMode, includeDiagram, includeChart});
+      
+      setResult(result.data);
+      setLoading(false);
+      setTopic("");
+      setClassLevel("");
+      setExamType("");
+      setRevisionMode(false);
+      setIncludeChart(false);
+      setIncludeDiagram(false);
+      if(typeof result.creditsLeft == "number"){
+        dispatch(updateCredits(result.creditsLeft));
+      }
+      toast.success("Notes Generated Successful");
+      
+    } catch (error) {
+      setLoading(false);
+      setError("Failed to fetch notes from server");
+      toast.error("Failed to Generate notes Retry Again 🔄️")
+    }
+  }
+  useEffect(() => {
+    if(!loading){
+      setProgress(0);
+      setProgressText("");
+      return;
+    }
+    let value = 0;
+    const interval = setInterval(() => {
+      value += Math.random() * 8;
+      if(value>=95){
+        value = 95;
+        setProgressText("Almost done...");
+        clearInterval(interval);
+      }else if(value> 70){
+        setProgressText("finalizing notes...");
+      }else if(value> 40){
+        setProgressText("processing content...");
+      }else{
+        setProgressText("Generating notes...");
+      }
+      setProgress(Math.floor(value));
+    },1300)
+    return () => clearInterval(interval);
+  },[loading]);
   return (
     <motion.div
       initial={{ opacity: 0, x: -20 }}
@@ -54,11 +115,33 @@ const TopicForm = ({ setResult, setLoading, loading, setError }) => {
         />
       </div>
       <motion.button 
+      onClick={handleSubmit}
       disabled={loading}
       whileTap={{scale:0.9}}
         className={`w-full mt-4 py-3 rounded-xl font-semibold flex items-center justify-center gap-3 transition cursor-pointer ${loading ?"bg-gray-300 text-gray-600 cursor-not-allowed":"bg-gradient-to-br from-white to-gray-200 text-black shadow-[0_15px_35px_rgba(0,0,0,0.75)]"}`}>
             {loading? <CgSpinnerTwo color={"blue"} size={23} className="animate-spin"/>: <div className="cursor-pointer text-gray-800">Generate Notes</div>}
       </motion.button>
+
+      {loading && <div className="mt-4 space-y-2">
+        <div className="w-full h-2 rounded-full bg-white/10 overflow-hidden">
+          <motion.div
+          initial={{width:0}}
+          animate={{width: `${progress}%`}}
+          transition={{ease: "easeOut",duration: 0.6}}
+          className="h-full bg-linear-to-r from-green-400 via-emerald-400 to-green-500">
+
+          </motion.div>
+        </div>
+
+        <div className="flex justify-between text-xs text-gray-300">
+            <span>{progressText}</span>
+            <span>{progress}%</span>
+        </div>
+        <p className="text-gray-400 text-center">
+          This may take up to 2-5 minutes. Please don't close or refresh the page.
+        </p>
+        </div>}
+
     </motion.div>
   );
 };

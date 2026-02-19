@@ -34,7 +34,12 @@ export const generateNotes = async (req, res) => {
       includeChart,});
 
     const aiResponse = await generateGeminiResponse(prompt);
-
+    if(!aiResponse){
+        return res.status(500).json({
+                success: false,
+                message: "Failed to generate notes. Please try again."
+        });
+    }
     const notes = await Notes.create({
         user: user._id,
         topic,
@@ -60,7 +65,7 @@ export const generateNotes = async (req, res) => {
         creditsLeft: user.credits
     })
   } catch (error) {
-    console.log(error);
-    return res.status(400).json({message: "Notes Creation Failed !!"});
+    console.log("Api Key limit reached or Api is busy ");
+    return res.status(500).json({message: "Notes Creation Failed AI busy !!"});
   }
 };
