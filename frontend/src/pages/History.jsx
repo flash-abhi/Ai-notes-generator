@@ -16,6 +16,7 @@ const History = () => {
   const credits = userData?.credits || 0;
   const [selectedNote, setSelectedNote] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [activeNodeId,setActiveNodeId] = useState(null);
   const navigate = useNavigate();
   useEffect(()=>{
     if(window.innerWidth >= 1024){
@@ -38,6 +39,7 @@ const History = () => {
   };
   const openNotes = async (noteId) => {
     setLoading(true);
+    setActiveNodeId(noteId);
     try {
       const res = await axios.get(`${serverUrl}/api/notes/${noteId}`,{withCredentials:true});
       setSelectedNote(res.data.content);
@@ -117,7 +119,9 @@ const History = () => {
                 )}
                 <ul className="space-y-3">
                   {topics.map((t,i) => (
-                    <li onClick={() => {openNotes(t._id);}} key={i} className="cursor-pointer rounded-xl p-3 bg-white/5 border border-white/10 hover:bg-white/10">
+                    <li onClick={() => {openNotes(t._id);}} key={i} className={`cursor-pointer rounded-xl p-3 border transition-all ${
+                      activeNodeId === t._id ? "bg-green-500/30 border-green-400 ":"bg-white/5 border-white/10 hover:bg-white/10"
+                    }`}>
                       <p className="text-sm font-semibold text-white">
                           {t.topic}
                       </p>
