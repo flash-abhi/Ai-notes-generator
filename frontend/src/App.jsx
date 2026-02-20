@@ -11,7 +11,7 @@ import Notes from "./pages/Notes"
 import PaymentSuccess from "./pages/PaymentSuccess"
 import PaymentFailed from "./pages/PaymentFailed"
 
-export const serverUrl = "http://localhost:8000"
+export const serverUrl = import.meta.env.BACKEND_URL 
 function App() {
   const dispatch = useDispatch();
   const {userData } = useSelector((state) => state.user);
