@@ -3,6 +3,7 @@ import { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import MermaidSetup from "./MermaidSetup";
 import RechartSetup from "./RechartSetup";
+import { downloadPdf } from "../hooks/api";
 const markDownComponent = {
     h1:({children}) => (
         <h1 className="text-2xl font-bold text-indigo-700 mt-6 mb-4 border-b pb-2">
@@ -59,7 +60,7 @@ const FinalResult = ({result}) => {
                     `}>
                         {quickRevision ? "Exit Revision Mode": "Quick Revision "}
                     </button>
-                <button className="px-4 py-2 rounded-lg text-sm font-medium bg-indigo-600 text-white hover:bg-indigo-700">
+                <button onClick={() => downloadPdf(result)} className="px-4 py-2 rounded-lg text-sm font-medium bg-indigo-600 text-white hover:bg-indigo-700">
                     Download PDF
                 </button>
             </div>
