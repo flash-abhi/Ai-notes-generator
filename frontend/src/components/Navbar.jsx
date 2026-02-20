@@ -1,19 +1,17 @@
 import { useState } from 'react'
 import {AnimatePresence, motion} from "framer-motion";
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import axios  from 'axios';
 import { serverUrl } from '../App';
 import {toast} from "react-toastify";
 import { useNavigate } from 'react-router-dom';
 import { setUserData } from '../redux/userSlice';
-import { useEffect } from 'react';
-const Navbar = () => {
+const Navbar = ({credits,userData}) => {
     const navigate = useNavigate();
-    const {userData} = useSelector((state) => state.user);
-    const credits = userData?.credits;
     const [showCredits, setShowCredits] = useState(false);
     const [showProfile, setShowProfile] = useState(false);
     const dispatch = useDispatch();
+
     const handleSignout = async () => {
         try {
             const result = await axios.get(serverUrl+"/api/auth/logout",{withCredentials: true});
@@ -44,7 +42,7 @@ const Navbar = () => {
         <div className='flex flex-col justify-start items-start'>
             <div className='flex gap-2 items-center'>
                 <img src="logo.png" className='w-12 h-10' alt="logo" />
-                <span className='text-lg flex  md:block font-semibold text-white'>ENG  </span>
+                <span className='text-lg flex  font-semibold text-white'>ENG <div className='h-2 w-2 bg-green-600 mx-4 animate-ping rounded-full'></div>  </span>
             </div>
             <span className='text-gray-300 text-xs'>
                 Exam Note Generator

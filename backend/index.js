@@ -7,6 +7,7 @@ import cookieParser from "cookie-parser";
 import { authRouter } from "./routes/auth.route.js";
 import { userRouter } from "./routes/user.routes.js";
 import { notesRouter } from "./routes/generate.route.js";
+import { pdfRouter } from "./routes/pdf.route.js";
 const app = express();
 const port = process.env.PORT || 8000;
 app.use(express.json());
@@ -25,6 +26,7 @@ app.get("/",(req,res)=> {
 app.use("/api/auth",authRouter);
 app.use("/api/user",userRouter);
 app.use("/api/notes",notesRouter);
+app.use("/api/pdf",pdfRouter);
 app.listen(port , ()=> {
     connectDB();
     console.log("SERVER IS RUNNING ON PORT ",port);

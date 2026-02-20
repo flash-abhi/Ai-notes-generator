@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { motion } from "motion/react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -9,7 +9,7 @@ import FinalResult from "../components/FinalResult";
 
 const Notes = () => {
   const {userData} = useSelector((state)=> state.user);
-  const credits = userData.credits;
+  const credits = userData?.credits || 0;
   const navigate = useNavigate();
   const [result,setResult] = useState(null);
   const [loading,setLoading] = useState(false);
@@ -39,13 +39,13 @@ const Notes = () => {
         <div className="flex gap-2">
           <img src="logo.png" alt="logo" className="w-10 h-8" />
           <h1 className="text-xl flex gap-2font-bold bg-gradient-to-r from-white via-gray-300 to-white bg-clip-text text-transparent">
-            <span>ENG</span> <div className="w-3 h-3 mx-2 rounded-full animate-ping bg-white"></div>
+            <span className="font-bold">ENG</span> <div className="w-2 h-2 mx-2 rounded-full animate-ping bg-green-600"></div>
           </h1>
         </div>
         <p className="text-xs text-gray-300  mt-1">Exam Notes Generator</p>
       </div>
       <div className="flex items-center gap-2">
-        <button onClick={() => navigate("/pricing")} className="flex items-center gap-2 px-2 py-2 rounded-full bg-white/10 border border-white/20 text-white text-sm">
+        <button onClick={() => navigate("/pricing")} className="flex cursor-pointer hover:bg-white/20 items-center gap-2 px-2 py-2 rounded-full bg-white/10 border border-white/20 text-white text-sm">
           <span className="text-xl">💎</span>
           <span className="text-[16px]">{credits}</span>
           <motion.span
@@ -56,7 +56,7 @@ const Notes = () => {
             ➕
           </motion.span>
         </button>
-        <button onClick={() => navigate("/history")} className="px-4 py-3 rounded-full text-sm font-medium bg-white/10 border border-white/20 text-white hover:bg-white/20 transition flex items-center gap-2">
+        <button onClick={() => navigate("/history")} className="px-4 py-3 cursor-pointer rounded-full text-sm font-medium bg-white/10 border border-white/20 text-white hover:bg-white/20 transition flex items-center gap-2">
            📚 Notes
         </button>
       </div>
@@ -67,10 +67,10 @@ const Notes = () => {
     className="my-12 flex justify-around"
     > 
       <TopicForm loading={loading} setResult={setResult} setLoading={setLoading} setError={setError}/>
-      <div className="hidden md:block "><img src="robot.png" className="h-100" /></div>
+      <div className="hidden mt-10 relative top-15 md:block border-b border-green-600"><img src="robot.png" className="h-100 animate-bounce" /></div>
     </motion.div>
     {loading && (
-      <motion.div 
+      <motion.div
       animate={{opacity: [0.4,1,0.4]}}
       transition={{repeat: Infinity, duration: 1.2}}
       className="text-center text-black font-medium mb-6"

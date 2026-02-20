@@ -3,11 +3,15 @@ import Feature from "../components/Feature";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import { motion } from "motion/react";
+import { useSelector } from "react-redux";
 const Home = () => {
+  const {userData} = useSelector((state) => state.user);
+  const credits = userData?.credits;
   const navigate = useNavigate();
+  console.log(userData);
   return (
     <div className="relative min-h-screen overflow-hidden bg-white text-black">
-      <Navbar />
+      {userData && <Navbar credits={credits} userData={userData}/>}
       {/* top */}
       <section className="max-w-7xl mx-auto px-8 pt-24 grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
         <div>
@@ -61,7 +65,7 @@ const Home = () => {
         style={{ transformStyle: "preserve-3d" }}
         >
           <div className="overflow-hidden">
-            <img src="image.png" alt="image1" style={{transform: "translateZ(35px)"}} />
+            <img src="image.png" alt="image1" style={{transform: "translateZ(35px)"}} className="animate-pulse"/>
           </div>
         </motion.div>
       </section>

@@ -16,7 +16,6 @@ const Auth = () => {
     try {
       const response = await signInWithPopup(auth, provider);
       const user = response.user;
-      // console.log(user);
       const name = user.displayName;
       const email = user.email;
       const result = await axios.post(
@@ -24,10 +23,11 @@ const Auth = () => {
         { name, email },
         { withCredentials: true },
       );
+      dispatch(setUserData(result.data.user));
       navigate("/");
-      dispatch(setUserData(result.data));
       toast.success("Login Successful");
     } catch (error) {
+      dispatch(setUserData(null));
       toast.error("Login Failed");
       console.error("Error during Google sign-in:", error);
     }
@@ -79,15 +79,16 @@ const Auth = () => {
             Unlock Smart <br /> Study Notes
           </h1>
           <motion.button
+            animate={{opacity:[0.9]}}
+            transition={{  duration: 2, ease:"easeInOut" }}
             whileHover={{
               scale: 1.02,
             }}
             whileTap={{
               scale: 1,
             }}
-            transition={{ type: "spring", stiffness: 300, damping: 20 }}
             onClick={handleGoogleAuth}
-            className="mt-4 cursor-pointer animate-pulse  px-10 py-3 rounded-xl flex items-center gap-3 bg-gradient-to-br from-black/90 via-black/80 to-black/90 border border-white/10 text-white font-semibold text-lg shadow-2xl"
+            className="mt-4 cursor-pointer  px-10 py-3 rounded-xl flex items-center gap-3 bg-gradient-to-br from-orange-600/90 via-black/80 to-black/90 border border-white/10 text-white font-semibold text-lg shadow-2xl"
           >
             <FcGoogle size={22} /> Continue With Google
           </motion.button>
