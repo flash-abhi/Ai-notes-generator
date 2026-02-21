@@ -60,7 +60,7 @@ export const stripeWebhook = async (req,res) => {
         if(!userId || !creditsToAdd){
             return res.status(400).json({message: "Invalid metadata"});
         }
-        const user = User.findByIdAndUpdate(userId, {
+        const user = await User.findByIdAndUpdate(userId, {
             $inc : {credits: creditsToAdd},
             $set : {isCreditAvailable: true},
         },{new: true})
